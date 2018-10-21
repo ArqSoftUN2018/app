@@ -5,6 +5,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
+import { Events } from 'ionic-angular'
+import { LogInPage } from '../pages/log-in/log-in';
+import { BoardsPage } from '../pages/boards/boards';
+
 
 @Component({
   templateUrl: 'app.html'
@@ -12,11 +16,12 @@ import { ListPage } from '../pages/list/list';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  rootPage: any = BoardsPage;
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
+      private events:Events) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -33,6 +38,15 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
+      // Agregar eventos
+      this.events.subscribe('user:unauthorized',(_)=>{
+        this.nav.setRoot(LogInPage)
+      })
+
+      this.events.subscribe('home',(_)=>{
+        this.nav.setRoot(HomePage)
+      })
     });
   }
 
