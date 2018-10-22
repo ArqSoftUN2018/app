@@ -16,7 +16,7 @@ import { BoardsPage } from '../pages/boards/boards';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = BoardsPage;
+  rootPage: any = LogInPage;
 
   pages: Array<{title: string, component: any}>;
 

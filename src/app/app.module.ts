@@ -12,10 +12,14 @@ import { ConnectorProvider } from '../providers/connector/connector';
 import { MemoryProvider } from '../providers/memory/memory';
 import { NotificationProvider } from '../providers/notification/notification';
 import { HttpModule } from '@angular/http'
+import { HttpClientModule } from '@angular/common/http'
 import { IonicStorageModule } from '@ionic/storage';
 import { BoardsPage } from '../pages/boards/boards';
 import { LogInPage } from '../pages/log-in/log-in';
 import { BoardDetailsPage } from '../pages/board-details/board-details';
+import { TaskPage } from '../pages/task/task';
+import { BoardUsersPage } from '../pages/board-users/board-users';
+
 
 @NgModule({
   declarations: [
@@ -24,13 +28,16 @@ import { BoardDetailsPage } from '../pages/board-details/board-details';
     ListPage,
     BoardsPage,
     LogInPage,
-    BoardDetailsPage
+    BoardDetailsPage,
+    TaskPage,
+    BoardUsersPage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpModule,
-    IonicStorageModule
+    IonicStorageModule.forRoot(),
+    HttpClientModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -39,7 +46,9 @@ import { BoardDetailsPage } from '../pages/board-details/board-details';
     ListPage,
     BoardsPage,
     LogInPage,
-    BoardDetailsPage
+    BoardDetailsPage,
+    TaskPage,
+    BoardUsersPage
   ],
   providers: [
     StatusBar,
@@ -47,7 +56,8 @@ import { BoardDetailsPage } from '../pages/board-details/board-details';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ConnectorProvider,
     MemoryProvider,
-    NotificationProvider
+    NotificationProvider,
+    Storage
   ]
 })
 export class AppModule {}

@@ -11,6 +11,16 @@ $font-path: "../assets/fonts";
 // http://ionicframework.com/docs/theming/rtl-support/
 $app-direction: ltr;
 
+@font-face {
+  font-family: Lobster;
+  src: url("../assets/fonts/Lobster-Regular.ttf");
+}
+@font-face {
+  font-family: Lato;
+  src: url("../assets/fonts/Lato-Regular.ttf");
+}
+
+$font-family-base: "Lobster",serif !default;
 
 @import "ionic.globals";
 
@@ -34,12 +44,14 @@ $app-direction: ltr;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #488aff,
-  secondary:  #32db64,
+  primary:    #006dcc,
+  secondary:  #CACCC8,
   danger:     #f53d3d,
   light:      #f4f4f4,
   dark:       #222
 );
+
+
 
 
 // App iOS Variables

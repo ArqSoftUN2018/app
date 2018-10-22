@@ -14,3 +14,51 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+ion-app{
+    font-family: "Lobster", serif;
+}
+.alert-style{
+    font-family: "Lobster", serif;
+    font-size:30px;
+}
+
+ion-navbar{
+    display:block;
+    background-color: #006dcc;
+    box-shadow: 0px 5px 6px rgba(0, 0, 0, 0.5);
+}
+ion-footer{
+    display:block;
+    background-color: #006dcc;
+    box-shadow: 0px -5px 6px rgba(0, 0, 0, 0.5);
+}
+ion-content {
+    background-color: #CACCC8;
+}
+ion-input{
+    font-family: "Lato", serif;
+}
+#site-title{
+    font-size:38px;
+}
+#site-title span{
+    color: #006dcc;
+}
+.divider{
+    border-bottom: 2px solid #006dcc;
+    margin-bottom: 10px;
+}
+.subtitle{
+    text-shadow: 1px 1px #006dcc;
+    font-size:38px;
+}
+.main-container{
+    background-color:rgba(240,240,240,0.8)
+}
+.subtitle-container{
+    display:block;
+    font-size:28px;
+    text-shadow:1px 1px 2px #006dcc;
+    border-bottom: 2px solid #006dcc;
+    border-top: 2px solid #006dcc;
+}

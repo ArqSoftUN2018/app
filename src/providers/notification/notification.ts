@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AlertController } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 
 /*
   Generated class for the NotificationProvider provider.
@@ -10,8 +10,9 @@ import { AlertController } from 'ionic-angular';
 */
 @Injectable()
 export class NotificationProvider {
-
-  constructor(public http: HttpClient, private alertCtrl:AlertController) {
+  private loadingTime:number = 30000
+  private loader:any = null
+  constructor(private alertCtrl:AlertController,private loadingCtrl:LoadingController) {
     console.log('Hello NotificationProvider Provider');
   }
   
@@ -19,9 +20,53 @@ export class NotificationProvider {
       let instance = this.alertCtrl.create({
         title: title,
         message: message,
-        buttons: ['OK']
+        buttons: ['OK'],
+        cssClass: 'alert-style'
       })
 
       instance.present()
+  }
+
+  loaderPresent(){
+    this.loader = this.loadingCtrl.create({
+      content: 'Espere un momento por favor',
+      duration: this.loadingTime
+    })
+    this.loader.present()
+  }
+  confirmation(message:string){
+    return new Promise((resolve,reject)=>{
+      let instance = this.alertCtrl.create({
+        title: "Confirmacion",
+        subTitle: "Esta seguro/a ?",
+        message: message,
+        buttons:[
+          {
+            text: 'No',
+            role: 'cancel',
+            handler: () =>{
+              
+            }
+          },
+          {
+            text: 'Si',
+            handler: (data) => {
+              resolve()
+            }
+          }
+        ]
+      })
+      instance.present()
+    })
+  }
+
+  loaderHide(){
+    if(! this.loader){
+      return
+    }
+    this.loader.dismiss()
+      .then(_=>{
+        this.loader = null
+      })
   }
 }

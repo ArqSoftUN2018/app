@@ -12,93 +12,37 @@
 
 </ion-header>
 
-
-<ion-content padding>
-  
-    <ion-card>
+<ion-content padding>  
+    <ion-card *ngFor="let lista of this.listas">
       <ion-card-header>
-        Planning
+        {{ lista.nombre }}
+        <ion-icon name="close" (click)="this.deleteList(tarea)"></ion-icon>
       </ion-card-header>
       <ion-card-content>
         <ion-grid>
           <ion-row>
-            <ion-col *ngFor="let task of this.tasks.backlog" col-6>
-                <ion-item (click)="this.showRadio(task)">{{ task.name }}</ion-item>
-                <ion-icon *ngIf="this.boardsStates.backlog.drop" name="close" (click)="this.delete(task)"></ion-icon>
+            <ion-col *ngFor="let tarea of lista.tareas" col-6>
+                <ion-item (click)="this.showRadio(lista,tarea)">{{ tarea.nombre }}</ion-item>
+                <ion-icon *ngIf="lista.borrable" name="close" (click)="this.delete(lista,tarea)"></ion-icon>
             </ion-col>
           </ion-row>
         </ion-grid>
         <ion-segment>
-          <ion-segment-button value="new" (click)="this.changeDropState('backlog')">
+          <ion-segment-button value="new" (click)="this.changeDropState(lista)">
             Eliminar
           </ion-segment-button>
-          <ion-segment-button value="hot" (click)="this.addTask('backlog')">
+          <ion-segment-button value="hot" (click)="this.addTask(lista)">
             Agregar
           </ion-segment-button>
         </ion-segment>
-        <h3>Separador</h3>
-        <ion-grid>
-          <ion-row>
-            <ion-col *ngFor="let task of this.tasks.backlog" col-4>
-                <ion-item>{{ task.name }}</ion-item>
-                <ion-icon *ngIf="this.boardsStates.backlog.drop" name="close"></ion-icon>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-        <ion-segment>
-            <ion-segment-button value="new">
-              Eliminar Usuario
-            </ion-segment-button>
-            <ion-segment-button value="hot">
-              Agregar Usuario
-            </ion-segment-button>
-          </ion-segment>
       </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-        <ion-card-header>
-          To Do
-        </ion-card-header>
-        <ion-card-content>
-          <ion-grid>
-            <ion-row>
-              <ion-col *ngFor="let task of this.tasks.toDoTask" col-6 (click)="this.showRadio(task)">{{ task.name }}</ion-col>
-            </ion-row>
-          </ion-grid>
-          <ion-segment>
-            <ion-segment-button value="new">
-              Eliminar
-            </ion-segment-button>
-            <ion-segment-button value="hot">
-              Agregar
-            </ion-segment-button>
-          </ion-segment>
-        </ion-card-content>
-      </ion-card>
-
-      <ion-card>
-          <ion-card-header>
-            Doing
-          </ion-card-header>
-          <ion-card-content>
-            <ion-grid>
-              <ion-row>
-                <ion-col *ngFor="let task of this.tasks.doing" col-6 (click)="this.showRadio(task)">{{ task.name }}</ion-col>
-              </ion-row>
-            </ion-grid>
-            <ion-segment>
-              <ion-segment-button value="new">
-                Eliminar
-              </ion-segment-button>
-              <ion-segment-button value="hot">
-                Agregar
-              </ion-segment-button>
-            </ion-segment>
-          </ion-card-content>
-        </ion-card>
-
-        <button ion-button full>Agregar Lista
-          <ion-icon name="add" (click)="this.delete(task)"></ion-icon>
-        </button>
+    </ion-card> 
+    <ion-segment>
+      <ion-segment-button value="new" (click)="this.openUsers()">
+        Revisar Usuarios 
+      </ion-segment-button>
+      <ion-segment-button value="hot" (click)="this.addList()">
+        Agregar Lista <ion-icon name="add"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
 </ion-content>

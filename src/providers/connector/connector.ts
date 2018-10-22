@@ -50,7 +50,7 @@ export class ConnectorProvider {
               .subscribe(data=>{
                 resolve(data.json())
               },error=>{
-                this.notification.alert('Error',error.message)
+                reject(error.json().error)
               })
     })
   }

@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, DateTime } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
-
+import { Tarea, Lista, Tablero, Usuario } from '../../app/interfaces'
+import { NotificationProvider } from '../../providers/notification/notification';
+import { TaskPage } from '../task/task';
+import { BoardUsersPage } from '../board-users/board-users';
 /**
  * Generated class for the BoardDetailsPage page.
  *
@@ -14,22 +17,9 @@ import { AlertController } from 'ionic-angular';
   to_do
   doing
  */
-
-class Task {
-  public name:string
-  public description:string
-  public type:string
-  public initDate:DateTime
-  public endDate:DateTime
-
-  constructor(type,name,description,initDate,endDate){
-    this.type = type
-    this.name = name
-    this.description = description
-    this.initDate = initDate
-    this.endDate = endDate
-  }
-
+class DropState{
+  public lista:Lista
+  public dropable:boolean = false
 }
 
 @IonicPage()
@@ -38,74 +28,60 @@ class Task {
   templateUrl: 'board-details.html',
 })
 export class BoardDetailsPage {
-  private board:any 
 
-  private boardsStates = {
-    backlog: {
-      name:"backlog",
-      drop:false
-    },
-    to_do:{
-      name:"To Do",
-      drop: false
-    },
-    doing:{
-      name:"Doing",
-      drop: false
-    }
-  }
-
-  private tasks:any = {
-    backlog: [],
-    toDoTask: [],
-    doing: []
-  }
+  private tablero_id:number
+  private tablero:Tablero
+  private listas:Lista[] = []
+  private dropStates:DropState[] = []
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private alert:AlertController,
-      private alertCtrl:AlertController) {
-        console.log(this.boardsStates.backlog.drop)
-
-    this.board = this.navParams.get('board')
+      private alertCtrl:AlertController, private notification:NotificationProvider) {
+    
+    this.tablero_id = this.navParams.get('tablero_id')
     this.dummyFill()
   }
   
-  showRadio(inputs:any[],) {
+  showRadio(lista:Lista,tarea:Tarea) {
+    let inputs:any[] = []
+    let selected:boolean
+
+    this.listas.forEach(list=>{
+      if(list.id==lista.id){
+        selected = true
+      }
+      inputs.push({
+        type: "radio",
+        label: list.nombre,
+        value: {
+            lista_anterior:lista,
+            lista_nueva:list
+        },
+        checked: selected
+      })
+      selected = false
+    })
     let alert = this.alertCtrl.create({
-      title: "Detalles",
-      inputs:[
-        {
-          type: "radio",
-          label:"planeado",
-          value: '1',
-          checked: true
-        },
-        {
-          type: "radio",
-          label:"planeado",
-          value: '0',
-          checked: false
-        },
-        {
-          type: "radio",
-          label:"planeado",
-          value: '0',
-          checked: false
-        }
-      ],
+      title: "Lista actual",
+      subTitle: 'Modificar lista correspondiente',
+      inputs: inputs,
       buttons:[
         {
           text: 'Cancelar',
-          role: 'cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Detalles Tarea',
           handler: () =>{
-
+            this.navCtrl.push(TaskPage,{tablero: this.tablero,tarea: tarea})
           }
         },
         {
-          text: 'OK',
+          text: 'Modificar',
           handler: (data) => {
-            console.log('OK clicked: ' );
-            console.log(data)
-            // I NEED TO GET THE VALUE OF THE SELECTED RADIO BUTTON HERE
+            this.notification.confirmation('Esto cambiara la tarea de lista')
+              .then(_=>{
+                this.cambiarLista(data['lista_anterior'],data['lista_nueva'],tarea)
+              })
           }
         }
       ]
@@ -114,32 +90,36 @@ export class BoardDetailsPage {
     alert.present();
   }
 
-  changeDropState(type:string){
-    this.boardsStates[type].drop = ! this.boardsStates[type].drop
+  changeDropState(lista:Lista){
+    lista.borrable = ! lista.borrable
+    //this.boardsStates[type].drop = ! this.boardsStates[type].drop
   }
-  addTask(type:string){
+  openUsers(){
+    this.navCtrl.push(BoardUsersPage,{tablero: this.tablero})
+  }
+  addTask(lista:Lista){
     // Agregar nuevas versiones atravez de http
 
     let alert = this.alertCtrl.create({
       title: "Detalles",
       inputs:[
         {
-          name:"name",
+          name:"nombre",
           placeholder:"nombre"
         },
         {
           type:'textarea',
-          name:"description",
+          name:"descripcion",
           placeholder:"Descripcion"
         },
         {
           type: "date",
-          name:"initDate",
+          name:"fecha_creacion",
           placeholder:"Fecha Inicial"
         },
         {
           type: "date",
-          name:"endDate",
+          name:"fecha_vencimiento",
           placeholder:"Fecha Final"
         }
       ],
@@ -154,38 +134,127 @@ export class BoardDetailsPage {
         {
           text: 'Agregar',
           handler: (data) => {
-            console.log('OK clicked: ' );
-            console.log(data)
+            this.notification.confirmation('Esto agregara una nueva tarea')
+              .then(_=>{
+                this.agregarTarea(lista,data)
+              })
+          }
+        }
+      ]
+
+    });
+    alert.present()
+  }
+  delete(lista:Lista,tarea:any){
+    this.notification.confirmation('Esto eliminara esta tarea, no puede deshacerse')
+      .then(_=>{
+        this.destruirTarea(lista,tarea)
+      })
+  }
+
+  addList(){
+    let alert = this.alertCtrl.create({
+      title: "Listas",
+      inputs:[
+        {
+          name:"nombre",
+          placeholder:"Nombre"
+        },
+        {
+          type:'textarea',
+          name:"descripcion",
+          placeholder:"Descripcion"
+        },
+      ],
+      buttons:[
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () =>{
+
+          }
+        },
+        {
+          text: 'OK',
+          handler: (data) => {
+            this.notification.confirmation('Esto creara una nueva lista')
+              .then(_=>{
+                this.agregarLista(this.tablero_id,data)
+              })
             // I NEED TO GET THE VALUE OF THE SELECTED RADIO BUTTON HERE
           }
         }
       ]
 
     });
+    alert.present();
+  }
 
-    alert.present()
-    this.tasks[type].push(
-      new Task('backlog',"planning " + 10,"des planning " + 10,Date.now(),Date.now())
-    )
+  deleteList(lista:Lista){
+    this.notification.confirmation('Esto removera definitivamente esta lista')
+      .then(_=>{
+        this.removerLista(lista)
+      })
   }
+
   dummyFill(){
+
+    this.tablero = new Tablero('Ejemplo','descripcion tablero')
+    this.listas = []
+
     for(var i=0;i < 5;i++){
-      this.tasks.backlog.push(
-        new Task('backlog',"planning " + i,"des planning " + i,Date.now(),Date.now())
+      let new_lista = new Lista('lista ' + i,'descripcion ' + i)
+      new_lista.id = this.listas.length + 1
+      this.listas.push(
+        new_lista
       )
-      this.tasks.toDoTask.push(
-        new Task('to_do',"To do " + i,"to Do " + i,Date.now(),Date.now())
-      )
-      this.tasks.doing.push(
-        new Task('doing',"Doing " + i,"Doing " + i,Date.now(),Date.now())
-      )
+      // creacion de usuario
+      let user = new Usuario()
+      user.nombre = "usuario " + i
+      user.email = "usuario_" + i + "@test.com"
+      user.id = this.tablero.usuarios.length + 1
+      this.tablero.usuarios.push(
+        user
+        )
     }
+    console.log('Hola si')
+    console.log(this.listas)
   }
-  delete(task:any){
-    alert('borrar')
-  }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad BoardDetailsPage');
   }
+  // Modificaciones de funciones al conectar
+  private agregarLista(tablero_id:number,datos:any){
+    let nueva_lista =  new Lista(datos['nombre'],datos['descripcion'])
+    nueva_lista.id = this.listas.length + 1
+    this.listas.push(
+     nueva_lista
+    )
+  }
+  private destruirTarea(lista:Lista,tarea:Tarea){
+    let index = lista.tareas.indexOf(tarea)
+    lista.tareas.splice(index,1)
+    this.notification.alert('Exito','La tarea fue destruida exitosamente')
+  }
+  private cambiarLista(lista_anterior:Lista,lista_nueva:Lista,tarea){
+    let index = lista_anterior.tareas.indexOf(tarea)
+    lista_anterior.tareas.splice(index,1)
+    lista_nueva.tareas.push(tarea)
 
+    this.notification.alert('Exito','tarea modificada de lista')
+  }
+  private removerLista(lista:Lista){
+    let index = this.listas.indexOf(lista)
+    this.listas.splice(index,1)
+  }
+  private agregarTarea(lista:Lista,datos:any){
+    let nueva_tarea = new Tarea(datos['nombre'],datos['descripcion'],datos['fecha_creacion'],datos['fecha_vencimiento'])
+    nueva_tarea.id = lista.tareas.length + 1
+    lista.tareas.push(
+      nueva_tarea
+    )
+    console.log('Nueva tarea')
+    console.log(nueva_tarea)
+  }
 }
