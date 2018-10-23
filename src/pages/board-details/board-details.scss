@@ -1,3 +1,29 @@
 page-board-details {
+    font-family: "Lobster", serif;
+    font-size: 18px;
 
+    .list-container{
+        box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.5);
+    }
+    .cancel-button{
+        background-color:#f53d3d;
+        color:white;
+    }
+    .task-container{
+        max-width: 100%;
+        font-family: "Lato", serif;
+    }
+
+    .buttons-container{
+        box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.5);
+        background-color: #006dcc;
+        font-size:25px;
+    }
+    .buttons-container button{
+        color:white;
+        font-size:20px;
+        background-color: #006dcc;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+    }
 }

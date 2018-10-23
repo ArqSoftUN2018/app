@@ -1,3 +1,18 @@
 page-home {
+    font-family: "Lobster", serif;
+    font-size: 18px;
 
+    .text-container{
+        font-family: "Lato", serif; 
+        font-size:17px;
+    }
+    #buttons-list{
+        box-shadow: 0px 5px 6px rgba(0, 0, 0, 0.5);
+    }
+    #buttons-list button{
+        height: 70px;
+        font-size: 22px;
+        color:white;
+        background-color:#006dcc;
+    }
 }

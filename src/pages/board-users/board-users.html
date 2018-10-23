@@ -6,8 +6,8 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>board_users</ion-title>
+  <ion-navbar color="primary">
+    <ion-title text-center>Usuarios del Tablero</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -27,40 +27,44 @@
         </ion-col>
       </ion-row>
       <ion-row>
-          <ion-list>
-            <ion-item *ngFor="let usuario of this.busquedas">
+          <ion-list col-12>
+            <ion-item col-12 *ngFor="let usuario of this.busquedas">
               <ion-thumbnail item-start>
                 <img src="img/thumbnail-puppy-1.jpg">
               </ion-thumbnail>
               <h2>{{ usuario.nombre }}</h2>
-              <p>{{ usuario.email }}</p>
-              <button outine round right>
-                  <ion-icon name="arrow-down" (click)="this.addUser(usuario)" right></ion-icon>
+              <p class="email-container">{{ usuario.email }}</p>
+              <button col-2 offset-10 outine round right class="down-button">
+                  <ion-icon name="arrow-down" (click)="this.addUser(usuario)"></ion-icon>
               </button>
             </ion-item>
-            <h3 *ngIf="!(this.busquedas && this.busquedas.length != 0)">
-              Ningun Usuario disponible
+            <h3 *ngIf="!(this.busquedas && this.busquedas.length != 0)" padding-top text-center>
+              Ningun Usuario Encontrado
             </h3>
           </ion-list>
       </ion-row>
-      <h1> Usuarios Correspondientes </h1>
+      <ion-row class="subtitle-container" text-center>Usuarios Agregados</ion-row>
       <ion-row>
-          <ion-list>
-            <ion-item *ngFor="let usuario of this.tablero.usuarios">
+          <ion-list col-12>
+            <ion-item col-12 *ngFor="let usuario of this.tablero.usuarios">
               <ion-thumbnail item-start>
                 <img src="img/thumbnail-puppy-1.jpg">
               </ion-thumbnail>
-              <h2>{{ usuario.nombre }}</h2>
-              <p>{{ usuario.email }}</p>
-              <button outine round right>
-                  <ion-icon name="arrow-down" (click)="this.removeUser(usuario)" right></ion-icon>
+              <button col-2 offset-10 outine round right class="delete-button">
+                  <ion-icon name="close" (click)="this.removeUser(usuario)"></ion-icon>
               </button>
-              <ion-icon name="close" (click)="this.removeUser(usuario)"></ion-icon>
+              <h2>{{ usuario.nombre }}</h2>
+              <p class="email-container">{{ usuario.email }}</p>
             </ion-item>
-            <h3 *ngIf="!(this.tablero.usuarios && this.tablero.usuarios.length != 0)">
-              Ningun Usuario disponible
+            <h3 *ngIf="!(this.tablero.usuarios && this.tablero.usuarios.length != 0)" padding-top text-center>
+              Ningun Usuario Asignado
             </h3>
           </ion-list>
       </ion-row>
     </ion-grid>
 </ion-content>
+<ion-footer>
+  <ion-toolbar  color="primary">
+    <ion-title text-center>With  <ion-icon name="heart"></ion-icon> from UNAL</ion-title>
+  </ion-toolbar>
+</ion-footer>

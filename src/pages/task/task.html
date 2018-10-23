@@ -6,39 +6,64 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>task</ion-title>
+  <ion-navbar  color="primary">
+    <ion-title text-center>Detalles de la Tarea</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-    <ion-card>
+    <ion-card class="task-container">
       <img src="img/nin-live.png"/>
       <ion-card-content>
-        <ion-card-title>
+        <ion-card-title class="task-name">
           {{ this.tarea.nombre }}
           </ion-card-title>
-        <p>
-            {{ this.tarea.descripcion }}
-        </p>
-        <h2>Lista de usuarios incluidos</h2>
+          <ion-row>
+            <ion-col col-12  class="task-description" text-justify>
+                {{ this.tarea.descripcion }}
+            </ion-col>
+          </ion-row>
+          <ion-row  class="subtitle-task">
+            <ion-col col-8 color="task-title">Fecha de Creacion</ion-col>
+            <ion-col col-4>{{ this.fecha_creacion }}</ion-col>
+          </ion-row>
+          <ion-row  class="subtitle-task">
+            <ion-col col-8  color="task-title">Fecha de Vencimiento</ion-col>
+            <ion-col col-4>
+              {{ this.fecha_vencimiento }}
+            </ion-col>
+          </ion-row>
+        <ion-row class="subtitle-container" text-center>Usuarios Añadidos</ion-row>
 
           <ion-grid>
             <ion-row>
-              <ion-col col-6 *ngFor="let usuario of this.tarea.responsables">
+              <ion-col class="user" col-6 *ngFor="let usuario of this.tarea.responsables">
                   <ion-chip #chip2>
-                    <ion-icon name="pin" color="primary"></ion-icon>
-                    <ion-label>{{ usuario.nombre }}</ion-label>
+                    <ion-icon name="person" color="primary"></ion-icon>
+                    <ion-label text-wrap>{{ usuario.nombre }}</ion-label>
                     <button ion-button (click)="this.dropUser(usuario)">
                       <ion-icon name="close"></ion-icon>
                     </button>
                   </ion-chip>
               </ion-col>
+
             </ion-row>
           </ion-grid>
-          <button ion-button round outline (click)="this.addUser()">Agregar</button>
+          <h3 *ngIf="!(this.tarea.responsables && this.tarea.responsables.length != 0)" padding-top text-center>
+              Ningun Usuario Asignado
+          </h3>
+          <ion-row>
+            <ion-col col-6 offset-3>
+                <button ion-button round outline (click)="this.addUser()">Agregar</button>
+            </ion-col>
+          </ion-row>
       </ion-card-content>
     </ion-card>
 </ion-content>
+<ion-footer>
+  <ion-toolbar  color="primary">
+    <ion-title text-center>With  <ion-icon name="heart"></ion-icon> from UNAL</ion-title>
+  </ion-toolbar>
+</ion-footer>

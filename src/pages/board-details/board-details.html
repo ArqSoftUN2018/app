@@ -6,24 +6,41 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>board_details</ion-title>
+  <ion-navbar color="primary">
+    <ion-title>Detalles de Tablero</ion-title>
   </ion-navbar>
 
 </ion-header>
 
-<ion-content padding>  
-    <ion-card *ngFor="let lista of this.listas">
+<ion-content padding class="main-container">  
+    <ion-card *ngFor="let lista of this.listas" class="list-container">
       <ion-card-header>
-        {{ lista.nombre }}
-        <ion-icon name="close" (click)="this.deleteList(tarea)"></ion-icon>
+        <ion-row>
+          <ion-col col-10 text-capitalize>
+              {{ lista.nombre }}
+          </ion-col>
+          <button col-2 round icon-only color='danger' class="cancel-button"  (click)="this.deleteList(tarea)">
+              <ion-icon name="close"></ion-icon>
+          </button>
+        </ion-row>
+        <ion-row class="divider"></ion-row>
+        
       </ion-card-header>
       <ion-card-content>
         <ion-grid>
           <ion-row>
-            <ion-col *ngFor="let tarea of lista.tareas" col-6>
-                <ion-item (click)="this.showRadio(lista,tarea)">{{ tarea.nombre }}</ion-item>
-                <ion-icon *ngIf="lista.borrable" name="close" (click)="this.delete(lista,tarea)"></ion-icon>
+            <ion-col *ngFor="let tarea of lista.tareas" col-12>
+              <ion-row>
+                  <ion-chip class="task-container" text-center>
+                    <ion-icon name="clock" color="primary"  (click)="this.showRadio(lista,tarea)"></ion-icon>
+                    <ion-label text-nowrap  (click)="this.showRadio(lista,tarea)">{{ tarea.nombre }}</ion-label>
+                    <button  *ngIf="lista.borrable" ion-button (click)="this.delete(lista,tarea)">
+                      <ion-icon name="close"></ion-icon>
+                    </button>
+                  </ion-chip>
+              </ion-row>
+                  
+         
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -37,12 +54,18 @@
         </ion-segment>
       </ion-card-content>
     </ion-card> 
-    <ion-segment>
-      <ion-segment-button value="new" (click)="this.openUsers()">
-        Revisar Usuarios 
-      </ion-segment-button>
-      <ion-segment-button value="hot" (click)="this.addList()">
-        Agregar Lista <ion-icon name="add"></ion-icon>
-      </ion-segment-button>
-    </ion-segment>
+    <ion-row class="buttons-container">
+      <button col-6 (click)="this.openUsers()">
+        Revisar Usuarios
+      </button>
+      <button col-6 (click)="this.addList()">
+       Agregar Lista
+      </button>
+    </ion-row>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar  color="primary">
+    <ion-title text-center>With  <ion-icon name="heart"></ion-icon> from UNAL</ion-title>
+  </ion-toolbar>
+</ion-footer>

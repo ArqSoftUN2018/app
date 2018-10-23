@@ -1,20 +1,49 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar  color="primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Home</ion-title>
+    <ion-title text-center>Inicio</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h3>nada cambio</h3>
-
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
-
-  <button ion-button secondary menuToggle>Toggle Menu</button>
-  <button ion-button secondary (click)="this.boards">Tableros</button>
+<ion-content padding  class="main-container">
+  <ion-card>
+    <ion-card-header>
+        <ion-row id ="site-title-container" text-center class="title_container">
+          <p id="site-title">Unal<span color="primary">Do</span></p>
+        </ion-row>
+    </ion-card-header>
+    <ion-card-content>
+        <p class='text-container' text-center>
+            Este sistema de administracion de proyectos le permitira organizar sus proyectos utilizando la metodologia
+              Kanban registrando actividades con tarjetas virtuales en donde tendra la capacidad de organizar tareas, agregar listas y
+              usuarios con bastante versatilidad.
+          </p>
+    </ion-card-content>
+  </ion-card>
+  <ion-grid>
+    <ion-row id="buttons-list">
+        <button icon-only large col-4 round>
+            <ion-icon name="bowtie"></ion-icon>
+        </button>
+        <button icon-only large col-4 round>
+            <ion-icon name="bookmarks"></ion-icon>
+        </button>
+        <button icon-only large col-4 round>
+            <ion-icon name="checkbox"></ion-icon>
+        </button>
+    </ion-row>
+  </ion-grid>
+  <ion-row class="divider"></ion-row>
+  <ion-row>
+      <button ion-button secondary col-5 offset-1 (click)="this.boards()">Tableros</button>
+      <button ion-button secondary col-5>Cerrar Sesion</button>
+  </ion-row>
   
 </ion-content>
+<ion-footer>
+  <ion-toolbar  color="primary">
+    <ion-title text-center>With  <ion-icon name="heart"></ion-icon> from UNAL</ion-title>
+  </ion-toolbar>
+</ion-footer>

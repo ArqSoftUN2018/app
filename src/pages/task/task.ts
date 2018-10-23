@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Tarea, Usuario, Tablero } from '../../app/interfaces'
 import { NotificationProvider } from '../../providers/notification/notification';
+import Moment from 'moment'
+
 /**
  * Generated class for the TaskPage page.
  *
@@ -17,14 +19,20 @@ import { NotificationProvider } from '../../providers/notification/notification'
 export class TaskPage {
   private tarea:Tarea
   private tablero:Tablero
+  private fecha_creacion:string
+  private fecha_vencimiento:string
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
       private notification:NotificationProvider,private alertCtrl:AlertController) {
-    this.tarea = this.navParams.get('tarea')
+    //this.tarea = this.navParams.get('tarea')
+    this.tarea = new Tarea('tarea 1','tarea 1',new Date(),new Date())
     this.tablero = this.navParams.get('tablero')
+    
+    this.fecha_creacion = this.tarea.fecha_creacion.getDay() + '-' + ( this.tarea.fecha_creacion.getMonth() + 1 ) + '-' + this.tarea.fecha_creacion.getFullYear()
+    this.fecha_vencimiento = this.tarea.fecha_creacion.getDay() + '-' + ( this.tarea.fecha_vencimiento.getMonth() + 1 ) + '-' + this.tarea.fecha_vencimiento.getFullYear()
 
     console.log('Task Page')
-    console.log(this.tablero)
+    console.log(this.fecha_creacion)
   }
 
   ionViewDidLoad() {

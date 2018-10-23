@@ -1,3 +1,26 @@
 page-task {
+    font-family: "Lobster", serif;
+    font-size: 18px;
 
+    .task-container{
+        box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.5);
+    }
+    .user{
+        max-width: 50%;
+    }
+    .subtitle-task{
+        font-size:16px;
+        margin-bottom:4px;
+    }
+    .task-title{
+        color: #006dcc;
+    }
+    .task-name{
+        font-size:25px;
+        color: #006dcc;
+    }
+    .task-description{
+        font-size:20px;
+        font-family: "Lato", serif;
+    }
 }

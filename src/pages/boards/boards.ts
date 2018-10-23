@@ -35,6 +35,7 @@ export class BoardsPage {
   addBoard(){
     let alert = this.alertCtrl.create({
       title: "Detalles",
+      cssClass:'alert-style',
       inputs:[
         {
           name:"nombre",
